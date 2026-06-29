@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>乘法小闖關</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #FFFDF7;
+  --ink:   #1C1917;
+  --yellow: #F5C800;
+  --teal:   #00C4B4;
+  --coral:  #FF4D4D;
+  --lavender: #A78BFA;
+  --chalk-board: #2D4A3E;
+  --chalk-board-light: #3A5E50;
+  --chalk-white: #F0EDE4;
+  --green-soft: #D1FAE5;
+  --red-soft:   #FFE4E4;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--cream);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 40px;
+  color: var(--ink);
+  /* subtle dot grid */
+  background-image: radial-gradient(circle, #D6D0C4 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ── Layout shell ── */
+.shell {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* ── Logo bar ── */
+.logo-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.logo-icon {
+  width: 48px; height: 48px;
+  background: var(--yellow);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.logo-text {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.9rem;
+  color: var(--ink);
+  letter-spacing: 1px;
+  line-height: 1;
+}
+.logo-text span { color: var(--teal); }
+
+/* ── Card base ── */
+.card {
+  background: white;
+  border-radius: 20px;
+  border: 2.5px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  width: 100%;
+  padding: 24px;
+}
+
+/* ── Section labels ── */
+.label-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--ink);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+
+/* ── Table buttons ── */
+.table-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.tbl-btn {
+  aspect-ratio: 1;
+  border-radius: 14px;
+  border: 2.5px solid transparent;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.tbl-btn[data-n="2"] { background: #FFE4E4; color: #C62828; }
+.tbl-btn[data-n="4"] { background: #FFF9C4; color: #F57F17; }
+.tbl-btn[data-n="5"] { background: #D1FAE5; color: #065F46; }
+.tbl-btn[data-n="8"] { background: #EDE9FE; color: #5B21B6; }
+
+.tbl-btn.active {
+  border-color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: translate(-1px, -1px);
+}
+.tbl-btn .tick {
+  position: absolute;
+  top: -7px; right: -7px;
+  width: 22px; height: 22px;
+  background: var(--ink);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 900;
+  display: none; align-items: center; justify-content: center;
+}
+.tbl-btn.active .tick { display: flex; }
+
+/* ── Pill toggle buttons ── */
+.pill-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.pill-btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 2.5px solid #D0CAC0;
+  background: transparent;
+  color: var(--ink);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.pill-btn.active {
+  background: var(--ink);
+  color: white;
+  border-color: var(--ink);
+}
+
+/* ── Start button ── */
+.start-btn {
+  width: 100%;
+  padding: 18px;
+  background: var(--yellow);
+  color: var(--ink);
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 5px 5px 0 var(--ink);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.start-btn:hover { transform: translate(-2px,-2px); box-shadow: 7px 7px 0 var(--ink); }
+.start-btn:active { transform: translate(2px,2px); box-shadow: 3px 3px 0 var(--ink); }
+
+/* ── Score row ── */
+.score-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+.score-pill {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 2.5px solid var(--ink);
+  text-align: center;
+}
+.score-pill .s-label { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; opacity: 0.5; }
+.score-pill .s-value { font-family: 'Fredoka One', cursive; font-size: 1.7rem; line-height: 1.1; }
+.score-pill.c { background: #D1FAE5; }
+.score-pill.c .s-value { color: #065F46; }
+.score-pill.w { background: #FFE4E4; }
+.score-pill.w .s-value { color: #C62828; }
+.score-pill.p { background: #EDE9FE; }
+.score-pill.p .s-value { color: #5B21B6; }
+
+/* ── Progress bar ── */
+.prog-track {
+  width: 100%;
+  height: 10px;
+  background: #E5E0D8;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 2px solid var(--ink);
+}
+.prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--lavender));
+  border-radius: 999px;
+  transition: width 0.4s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Chalkboard question card ── */
+.chalk-card {
+  background: var(--chalk-board);
+  border-radius: 20px;
+  border: 2.5px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  width: 100%;
+  padding: 28px 24px 20px;
+  position: relative;
+  overflow: hidden;
+}
+/* chalk texture lines */
+.chalk-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 30px,
+    rgba(255,255,255,0.02) 30px,
+    rgba(255,255,255,0.02) 31px
+  );
+  pointer-events: none;
+}
+.chalk-tray {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 10px;
+  background: #3A5E50;
+  border-top: 2px solid rgba(255,255,255,0.1);
+}
+
+.q-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(240,237,228,0.45);
+  margin-bottom: 10px;
+}
+.q-text {
+  font-family: 'Fredoka One', cursive;
+  font-size: 3.5rem;
+  color: var(--chalk-white);
+  letter-spacing: 4px;
+  line-height: 1;
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.08);
+  margin-bottom: 20px;
+}
+.q-hint {
+  font-size: 0.8rem;
+  color: rgba(240,237,228,0.5);
+  min-height: 18px;
+  margin-bottom: 4px;
+}
+
+/* ── Answer options ── */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+.opt-btn {
+  padding: 16px 8px;
+  border-radius: 14px;
+  border: 2.5px solid #D0CAC0;
+  background: white;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.7rem;
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s, background 0.12s;
+  box-shadow: 3px 3px 0 #D0CAC0;
+}
+.opt-btn:hover:not(:disabled) {
+  border-color: var(--teal);
+  box-shadow: 3px 3px 0 var(--teal);
+  transform: translate(-1px,-1px);
+}
+.opt-btn:disabled { cursor: default; }
+.opt-btn.correct-ans {
+  background: var(--green-soft);
+  border-color: #059669;
+  box-shadow: 3px 3px 0 #059669;
+  color: #065F46;
+}
+.opt-btn.wrong-ans {
+  background: var(--red-soft);
+  border-color: var(--coral);
+  box-shadow: 3px 3px 0 var(--coral);
+  color: #C62828;
+}
+
+/* ── Fill-in mode ── */
+.fill-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  align-items: center;
+}
+.fill-input {
+  flex: 1;
+  padding: 14px;
+  border-radius: 14px;
+  border: 2.5px solid #D0CAC0;
+  background: white;
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.2rem;
+  color: var(--ink);
+  text-align: center;
+  outline: none;
+  box-shadow: 3px 3px 0 #D0CAC0;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.fill-input:focus {
+  border-color: var(--teal);
+  box-shadow: 3px 3px 0 var(--teal);
+}
+.fill-input.correct-ans { background: var(--green-soft); border-color: #059669; box-shadow: 3px 3px 0 #059669; }
+.fill-input.wrong-ans   { background: var(--red-soft);   border-color: var(--coral); box-shadow: 3px 3px 0 var(--coral); }
+
+.confirm-btn {
+  padding: 14px 20px;
+  background: var(--teal);
+  color: white;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform 0.12s, box-shadow 0.12s;
+  white-space: nowrap;
+}
+.confirm-btn:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--ink); }
+.confirm-btn:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--ink); }
+
+/* ── Feedback strip ── */
+.feedback {
+  margin-top: 12px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  min-height: 32px;
+  transition: opacity 0.2s;
+}
+.feedback.ok   { color: #059669; }
+.feedback.fail { color: var(--coral); }
+
+/* ── Result screen ── */
+.result-card {
+  background: white;
+  border-radius: 20px;
+  border: 2.5px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  width: 100%;
+  padding: 28px 24px;
+  text-align: center;
+}
+.result-emoji { font-size: 4rem; margin-bottom: 6px; }
+.result-title { font-family: 'Fredoka One', cursive; font-size: 1.8rem; color: var(--ink); margin-bottom: 18px; }
+.result-stats {
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+.stat-badge {
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 2px solid var(--ink);
+  font-weight: 900;
+  font-size: 0.95rem;
+}
+.stat-badge.g { background: #D1FAE5; color: #065F46; }
+.stat-badge.r { background: #FFE4E4; color: #C62828; }
+.stat-badge.b { background: #EDE9FE; color: #5B21B6; }
+
+.review-box {
+  text-align: left;
+  background: #FFFBEB;
+  border: 2px solid #F5C800;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+.review-box h3 {
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #92400E;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.review-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 10px;
+  background: white;
+  border-radius: 8px;
+  border: 1.5px solid #FDE68A;
+  margin-bottom: 6px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+.review-item:last-child { margin-bottom: 0; }
+.review-item .ans { color: var(--teal); font-family: 'Fredoka One', cursive; font-size: 1.05rem; }
+
+.replay-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--teal);
+  color: white;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 5px 5px 0 var(--ink);
+  margin-bottom: 10px;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.replay-btn:hover { transform: translate(-2px,-2px); box-shadow: 7px 7px 0 var(--ink); }
+
+.menu-ret-btn {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  color: var(--ink);
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.menu-ret-btn:hover { background: #F5F0E8; }
+
+.hidden { display: none !important; }
+
+@media (max-width: 360px) {
+  .q-text { font-size: 2.8rem; }
+  .opt-btn { font-size: 1.4rem; padding: 12px 6px; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ══ MENU ══ -->
+  <div id="menuScreen">
+    <div class="logo-bar">
+      <div class="logo-icon">✏️</div>
+      <div class="logo-text">乘法<span>闖關</span></div>
+    </div>
+
+    <div class="card">
+      <div class="label-tag">📐 選擇段數（可多選）</div>
+      <div class="table-grid">
+        <button class="tbl-btn active" data-n="2">2<span class="tick">✓</span></button>
+        <button class="tbl-btn active" data-n="4">4<span class="tick">✓</span></button>
+        <button class="tbl-btn active" data-n="5">5<span class="tick">✓</span></button>
+        <button class="tbl-btn active" data-n="8">8<span class="tick">✓</span></button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="label-tag">✏️ 出題方式</div>
+      <div class="pill-row">
+        <button class="pill-btn active" data-mode="choice">選擇題</button>
+        <button class="pill-btn" data-mode="fill">填空題</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="label-tag">📊 題數</div>
+      <div class="pill-row">
+        <button class="pill-btn active" data-count="10">10 題</button>
+        <button class="pill-btn" data-count="20">20 題</button>
+        <button class="pill-btn" data-count="36">全部</button>
+      </div>
+    </div>
+
+    <button class="start-btn" id="startBtn">開始闖關 🚀</button>
+  </div>
+
+  <!-- ══ GAME ══ -->
+  <div id="gameScreen" class="hidden" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px;">
+
+    <div class="score-row">
+      <div class="score-pill c">
+        <div class="s-label">答對</div>
+        <div class="s-value" id="scoreCorrect">0</div>
+      </div>
+      <div class="score-pill w">
+        <div class="s-label">答錯</div>
+        <div class="s-value" id="scoreWrong">0</div>
+      </div>
+      <div class="score-pill p">
+        <div class="s-label">進度</div>
+        <div class="s-value" id="qProgress">1/10</div>
+      </div>
+    </div>
+
+    <div class="prog-track">
+      <div class="prog-fill" id="progFill" style="width:0%"></div>
+    </div>
+
+    <!-- Chalkboard -->
+    <div class="chalk-card">
+      <div class="q-label">✏️ 請作答</div>
+      <div class="q-text" id="questionText">2 × 3 = ?</div>
+      <div class="q-hint" id="questionHint"></div>
+      <div class="chalk-tray"></div>
+
+      <!-- choice -->
+      <div class="options-grid" id="choiceGrid">
+        <button class="opt-btn" id="opt0"></button>
+        <button class="opt-btn" id="opt1"></button>
+        <button class="opt-btn" id="opt2"></button>
+        <button class="opt-btn" id="opt3"></button>
+      </div>
+
+      <!-- fill -->
+      <div class="fill-row hidden" id="fillRow">
+        <input class="fill-input" id="fillInput" type="number" min="1" max="99" placeholder="?">
+        <button class="confirm-btn" id="submitFill">確認 ✓</button>
+      </div>
+
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </div>
+
+  <!-- ══ RESULT ══ -->
+  <div id="resultScreen" class="hidden result-card">
+    <div class="result-emoji" id="resultEmoji">🌟</div>
+    <div class="result-title" id="resultTitle">太厲害了！</div>
+    <div class="result-stats">
+      <div class="stat-badge g" id="rCorrect">答對 0</div>
+      <div class="stat-badge r" id="rWrong">答錯 0</div>
+      <div class="stat-badge b" id="rRate">正確率 0%</div>
+    </div>
+    <div class="review-box hidden" id="wrongList">
+      <h3>📝 再複習一下這些題目</h3>
+      <div id="wrongItems"></div>
+    </div>
+    <button class="replay-btn" id="replayBtn">再挑戰一次 🔄</button>
+    <button class="menu-ret-btn" id="menuReturnBtn">← 回主選單</button>
+  </div>
+
+</div>
+
+<script>
+// ── State ──
+let selectedTables = [2,4,5,8];
+let gameMode = 'choice';
+let totalCount = 10;
+let questions = [], currentQ = 0, correct = 0, wrong = 0;
+let wrongLog = [], answered = false;
+
+// ── Utils ──
+const $ = id => document.getElementById(id);
+const shuffle = a => { for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const show = id => $(id).classList.remove('hidden');
+const hide = id => $(id).classList.add('hidden');
+
+function generateQuestions() {
+  let pool = [];
+  for (let n of selectedTables) for (let m=1;m<=9;m++) pool.push({a:n,b:m,ans:n*m});
+  shuffle(pool);
+  return totalCount === 999 ? pool : pool.slice(0, Math.min(totalCount, pool.length));
+}
+
+function makeChoices(correct, a) {
+  let s = new Set([correct]);
+  const d = shuffle([-2,-1,1,2,-3,3,a,-a,5,-5]);
+  for (let v of d) { if (v>0&&v<=81&&!s.has(v)) s.add(v); if(s.size===4) break; }
+  let e=1; while(s.size<4){if(!s.has(e))s.add(e);e++;}
+  return shuffle([...s]);
+}
+
+// ── Table buttons ──
+document.querySelectorAll('.tbl-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const n = +btn.dataset.n;
+    btn.classList.toggle('active');
+    selectedTables = btn.classList.contains('active')
+      ? [...selectedTables, n]
+      : selectedTables.filter(x=>x!==n);
+  });
+});
+
+// ── Mode buttons ──
+document.querySelectorAll('[data-mode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-mode]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    gameMode = btn.dataset.mode;
+  });
+});
+
+// ── Count buttons ──
+document.querySelectorAll('[data-count]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-count]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    totalCount = btn.dataset.count === '36' ? 999 : +btn.dataset.count;
+  });
+});
+
+// ── Start ──
+$('startBtn').addEventListener('click', () => {
+  if (!selectedTables.length) { alert('請至少選一個段數！'); return; }
+  startGame();
+});
+
+function startGame() {
+  questions = generateQuestions();
+  currentQ = correct = wrong = 0; wrongLog = [];
+  hide('menuScreen'); hide('resultScreen');
+  show('gameScreen');
+  $('gameScreen').style.display = 'flex';
+  render();
+}
+
+function render() {
+  answered = false;
+  const q = questions[currentQ], total = questions.length;
+  $('questionText').textContent = `${q.a} × ${q.b} = ?`;
+  $('questionHint').textContent = '';
+  $('feedback').textContent = '';
+  $('feedback').className = 'feedback';
+  $('qProgress').textContent = `${currentQ+1}/${total}`;
+  $('scoreCorrect').textContent = correct;
+  $('scoreWrong').textContent = wrong;
+  $('progFill').style.width = `${(currentQ/total)*100}%`;
+
+  if (gameMode === 'choice') {
+    show('choiceGrid'); hide('fillRow');
+    const opts = makeChoices(q.ans, q.a);
+    for (let i=0;i<4;i++) {
+      const b = $('opt'+i);
+      b.textContent = opts[i]; b.className = 'opt-btn'; b.disabled = false;
+      b.onclick = () => handleChoice(opts[i], q.ans, b);
+    }
+  } else {
+    hide('choiceGrid'); show('fillRow');
+    const inp = $('fillInput');
+    inp.value = ''; inp.className = 'fill-input'; inp.disabled = false;
+    setTimeout(() => inp.focus(), 50);
+  }
+}
+
+function handleChoice(val, ans, btn) {
+  if (answered) return; answered = true;
+  document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
+  const fb = $('feedback');
+  if (val === ans) {
+    btn.classList.add('correct-ans');
+    fb.textContent = '🌟 答對了！'; fb.className = 'feedback ok'; correct++;
+  } else {
+    btn.classList.add('wrong-ans');
+    document.querySelectorAll('.opt-btn').forEach(b=>{if(+b.textContent===ans)b.classList.add('correct-ans');});
+    fb.textContent = `❌ 答案是 ${ans}`; fb.className = 'feedback fail'; wrong++;
+    wrongLog.push({...questions[currentQ]});
+  }
+  setTimeout(next, 950);
+}
+
+$('submitFill').addEventListener('click', handleFill);
+$('fillInput').addEventListener('keydown', e=>{ if(e.key==='Enter') handleFill(); });
+
+function handleFill() {
+  if (answered) return;
+  const inp = $('fillInput'), val = parseInt(inp.value);
+  if (isNaN(val)) return;
+  answered = true; inp.disabled = true;
+  const q = questions[currentQ], fb = $('feedback');
+  if (val === q.ans) {
+    inp.classList.add('correct-ans');
+    fb.textContent = '🌟 答對了！'; fb.className = 'feedback ok'; correct++;
+  } else {
+    inp.classList.add('wrong-ans');
+    fb.textContent = `❌ 答案是 ${q.ans}`; fb.className = 'feedback fail'; wrong++;
+    wrongLog.push({...q});
+  }
+  setTimeout(next, 950);
+}
+
+function next() {
+  currentQ++;
+  if (currentQ >= questions.length) showResult(); else render();
+}
+
+function showResult() {
+  hide('gameScreen'); show('resultScreen');
+  $('resultScreen').classList.remove('hidden');
+  const total = questions.length, rate = Math.round((correct/total)*100);
+  let emoji='🌟', title='滿分！你是乘法王！';
+  if (rate < 60)       { emoji='😅'; title='再加油！多練習就會變強！'; }
+  else if (rate < 80)  { emoji='👍'; title='不錯哦！繼續努力！'; }
+  else if (rate < 100) { emoji='🎉'; title='幾乎全對！超棒的！'; }
+  $('resultEmoji').textContent = emoji;
+  $('resultTitle').textContent = title;
+  $('rCorrect').textContent = `答對 ${correct}`;
+  $('rWrong').textContent = `答錯 ${wrong}`;
+  $('rRate').textContent = `正確率 ${rate}%`;
+  const wl=$('wrongList'), wi=$('wrongItems');
+  wi.innerHTML = '';
+  if (wrongLog.length) {
+    wl.classList.remove('hidden');
+    wrongLog.forEach(q=>{
+      const d=document.createElement('div'); d.className='review-item';
+      d.innerHTML=`<span>${q.a} × ${q.b} = ?</span><span class="ans">→ ${q.ans}</span>`;
+      wi.appendChild(d);
+    });
+  } else { wl.classList.add('hidden'); }
+}
+
+$('replayBtn').addEventListener('click', startGame);
+$('menuReturnBtn').addEventListener('click', () => {
+  hide('resultScreen'); hide('gameScreen');
+  show('menuScreen'); $('menuScreen').style.display='';
+});
+</script>
+</body>
+</html>
