@@ -148,6 +148,38 @@ body {
   color: white;
   border-color: var(--ink);
 }
+.diff-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.diff-btn {
+  flex: 1;
+  min-width: 90px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 2.5px solid #D0CAC0;
+  background: transparent;
+  color: var(--ink);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.diff-btn.active {
+  border-color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: translate(-1px,-1px);
+}
+.diff-btn[data-diff="easy"].active   { background: #D1FAE5; color: #065F46; }
+.diff-btn[data-diff="medium"].active { background: #FFF9C4; color: #B45309; }
+.diff-btn[data-diff="hard"].active   { background: #FFE4E4; color: #C62828; }
+.diff-hint {
+  font-size: 0.75rem;
+  color: #8A8478;
+  margin-top: 8px;
+}
 .start-btn {
   width: 100%;
   padding: 18px;
@@ -460,6 +492,16 @@ body {
   </div>
 
   <div class="card">
+    <div class="label-tag">🔥 難易度</div>
+    <div class="diff-row">
+      <button class="diff-btn active" data-diff="easy">😊 簡單</button>
+      <button class="diff-btn" data-diff="medium">🤔 中等</button>
+      <button class="diff-btn" data-diff="hard">🔥 困難</button>
+    </div>
+    <div class="diff-hint" id="diffHint">干擾選項差距大，較容易分辨</div>
+  </div>
+
+  <div class="card">
     <div class="label-tag">📊 題數</div>
     <div class="pill-row">
       <button class="pill-btn active" data-count="10">10 題</button>
@@ -534,9 +576,16 @@ body {
 <script>
 let selectedTables = [2,3,4,5,6,8,9];
 let gameMode = 'choice';
+let difficulty = 'easy';
 let totalCount = 10;
 let questions = [], currentQ = 0, correct = 0, wrong = 0;
 let wrongLog = [], answered = false;
+
+const diffHints = {
+  easy:   '干擾選項差距大，較容易分辨',
+  medium: '干擾選項稍微接近，需要仔細算',
+  hard:   '干擾選項來自相鄰乘法結果，超級燒腦！'
+};
 
 const $ = id => document.getElementById(id);
 const shuffle = a => { for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
@@ -550,10 +599,25 @@ function generateQuestions() {
   return totalCount === 999 ? pool : pool.slice(0, Math.min(totalCount, pool.length));
 }
 
-function makeChoices(correct, a) {
-  let s = new Set([correct]);
-  const d = shuffle([-2,-1,1,2,-3,3,a,-a,5,-5]);
-  for (let v of d) { if (v>0&&v<=81&&!s.has(v)) s.add(v); if(s.size===4) break; }
+function makeChoices(ans, a, b) {
+  let s = new Set([ans]);
+  if (difficulty === 'hard') {
+    // only neighboring multiplication-table results
+    const neighbors = [a*(b-1), a*(b+1), a*(b-2), a*(b+2)].filter(v => v>0 && v!==ans);
+    shuffle(neighbors);
+    for (let v of neighbors) { s.add(v); if (s.size===4) break; }
+  } else if (difficulty === 'medium') {
+    const d = shuffle([-4,-3,3,4,-a,a,-6,6]);
+    for (let v of d.map(x=>ans+x)) { if (v>0&&v<=81&&!s.has(v)) s.add(v); if(s.size===4) break; }
+  } else {
+    // easy: big random offsets
+    let guard = 0;
+    while (s.size < 4 && guard < 50) {
+      guard++;
+      const v = ans + (Math.floor(Math.random()*20)-10 || 7);
+      if (v>0 && v<=99 && v!==ans) s.add(v);
+    }
+  }
   let e=1; while(s.size<4){if(!s.has(e))s.add(e);e++;}
   return shuffle([...s]);
 }
@@ -573,6 +637,15 @@ document.querySelectorAll('[data-mode]').forEach(btn => {
     document.querySelectorAll('[data-mode]').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     gameMode = btn.dataset.mode;
+  });
+});
+
+document.querySelectorAll('[data-diff]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-diff]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    difficulty = btn.dataset.diff;
+    $('diffHint').textContent = diffHints[difficulty];
   });
 });
 
@@ -612,7 +685,7 @@ function render() {
 
   if (gameMode === 'choice') {
     show('choiceGrid'); hide('fillRow');
-    const opts = makeChoices(q.ans, q.a);
+    const opts = makeChoices(q.ans, q.a, q.b);
     for (let i=0;i<4;i++) {
       const b = $('opt'+i);
       b.textContent = opts[i]; b.className = 'opt-btn'; b.disabled = false;
