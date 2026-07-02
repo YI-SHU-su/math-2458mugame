@@ -9,20 +9,18 @@
 <style>
 :root {
   --cream: #FFFDF7;
-  --ink:   #1C1917;
+  --ink: #1C1917;
   --yellow: #F5C800;
-  --teal:   #00C4B4;
-  --coral:  #FF4D4D;
+  --teal: #00C4B4;
+  --coral: #FF4D4D;
   --lavender: #A78BFA;
   --chalk-board: #2D4A3E;
   --chalk-board-light: #3A5E50;
   --chalk-white: #F0EDE4;
   --green-soft: #D1FAE5;
-  --red-soft:   #FFE4E4;
+  --red-soft: #FFE4E4;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 body {
   font-family: 'Nunito', sans-serif;
   background: var(--cream);
@@ -32,12 +30,9 @@ body {
   align-items: center;
   padding: 24px 16px 40px;
   color: var(--ink);
-  /* subtle dot grid */
   background-image: radial-gradient(circle, #D6D0C4 1px, transparent 1px);
   background-size: 28px 28px;
 }
-
-/* ── Layout shell ── */
 .shell {
   width: 100%;
   max-width: 440px;
@@ -46,8 +41,6 @@ body {
   align-items: center;
   gap: 20px;
 }
-
-/* ── Logo bar ── */
 .logo-bar {
   display: flex;
   align-items: center;
@@ -70,8 +63,6 @@ body {
   line-height: 1;
 }
 .logo-text span { color: var(--teal); }
-
-/* ── Card base ── */
 .card {
   background: white;
   border-radius: 20px;
@@ -80,8 +71,6 @@ body {
   width: 100%;
   padding: 24px;
 }
-
-/* ── Section labels ── */
 .label-tag {
   display: inline-flex;
   align-items: center;
@@ -96,8 +85,6 @@ body {
   border-radius: 999px;
   margin-bottom: 10px;
 }
-
-/* ── Table buttons ── */
 .table-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -109,17 +96,19 @@ body {
   border-radius: 14px;
   border: 2.5px solid transparent;
   font-family: 'Fredoka One', cursive;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
   position: relative;
   display: flex; align-items: center; justify-content: center;
 }
 .tbl-btn[data-n="2"] { background: #FFE4E4; color: #C62828; }
+.tbl-btn[data-n="3"] { background: #FFE7CC; color: #B45309; }
 .tbl-btn[data-n="4"] { background: #FFF9C4; color: #F57F17; }
 .tbl-btn[data-n="5"] { background: #D1FAE5; color: #065F46; }
+.tbl-btn[data-n="6"] { background: #DBEAFE; color: #1E40AF; }
 .tbl-btn[data-n="8"] { background: #EDE9FE; color: #5B21B6; }
-
+.tbl-btn[data-n="9"] { background: #FCE7F3; color: #9D174D; }
 .tbl-btn.active {
   border-color: var(--ink);
   box-shadow: 3px 3px 0 var(--ink);
@@ -137,8 +126,6 @@ body {
   display: none; align-items: center; justify-content: center;
 }
 .tbl-btn.active .tick { display: flex; }
-
-/* ── Pill toggle buttons ── */
 .pill-row {
   display: flex;
   gap: 8px;
@@ -161,8 +148,6 @@ body {
   color: white;
   border-color: var(--ink);
 }
-
-/* ── Start button ── */
 .start-btn {
   width: 100%;
   padding: 18px;
@@ -179,8 +164,6 @@ body {
 }
 .start-btn:hover { transform: translate(-2px,-2px); box-shadow: 7px 7px 0 var(--ink); }
 .start-btn:active { transform: translate(2px,2px); box-shadow: 3px 3px 0 var(--ink); }
-
-/* ── Score row ── */
 .score-row {
   display: flex;
   gap: 10px;
@@ -201,8 +184,6 @@ body {
 .score-pill.w .s-value { color: #C62828; }
 .score-pill.p { background: #EDE9FE; }
 .score-pill.p .s-value { color: #5B21B6; }
-
-/* ── Progress bar ── */
 .prog-track {
   width: 100%;
   height: 10px;
@@ -217,8 +198,6 @@ body {
   border-radius: 999px;
   transition: width 0.4s cubic-bezier(.4,0,.2,1);
 }
-
-/* ── Chalkboard question card ── */
 .chalk-card {
   background: var(--chalk-board);
   border-radius: 20px;
@@ -229,7 +208,6 @@ body {
   position: relative;
   overflow: hidden;
 }
-/* chalk texture lines */
 .chalk-card::before {
   content: '';
   position: absolute;
@@ -250,7 +228,6 @@ body {
   background: #3A5E50;
   border-top: 2px solid rgba(255,255,255,0.1);
 }
-
 .q-label {
   font-size: 0.7rem;
   font-weight: 800;
@@ -274,8 +251,6 @@ body {
   min-height: 18px;
   margin-bottom: 4px;
 }
-
-/* ── Answer options ── */
 .options-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -312,8 +287,6 @@ body {
   box-shadow: 3px 3px 0 var(--coral);
   color: #C62828;
 }
-
-/* ── Fill-in mode ── */
 .fill-row {
   display: flex;
   gap: 10px;
@@ -339,8 +312,7 @@ body {
   box-shadow: 3px 3px 0 var(--teal);
 }
 .fill-input.correct-ans { background: var(--green-soft); border-color: #059669; box-shadow: 3px 3px 0 #059669; }
-.fill-input.wrong-ans   { background: var(--red-soft);   border-color: var(--coral); box-shadow: 3px 3px 0 var(--coral); }
-
+.fill-input.wrong-ans { background: var(--red-soft); border-color: var(--coral); box-shadow: 3px 3px 0 var(--coral); }
 .confirm-btn {
   padding: 14px 20px;
   background: var(--teal);
@@ -356,8 +328,6 @@ body {
 }
 .confirm-btn:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--ink); }
 .confirm-btn:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--ink); }
-
-/* ── Feedback strip ── */
 .feedback {
   margin-top: 12px;
   font-family: 'Fredoka One', cursive;
@@ -365,10 +335,8 @@ body {
   min-height: 32px;
   transition: opacity 0.2s;
 }
-.feedback.ok   { color: #059669; }
+.feedback.ok { color: #059669; }
 .feedback.fail { color: var(--coral); }
-
-/* ── Result screen ── */
 .result-card {
   background: white;
   border-radius: 20px;
@@ -394,7 +362,6 @@ body {
 .stat-badge.g { background: #D1FAE5; color: #065F46; }
 .stat-badge.r { background: #FFE4E4; color: #C62828; }
 .stat-badge.b { background: #EDE9FE; color: #5B21B6; }
-
 .review-box {
   text-align: left;
   background: #FFFBEB;
@@ -426,7 +393,6 @@ body {
 }
 .review-item:last-child { margin-bottom: 0; }
 .review-item .ans { color: var(--teal); font-family: 'Fredoka One', cursive; font-size: 1.05rem; }
-
 .replay-btn {
   width: 100%;
   padding: 16px;
@@ -442,7 +408,6 @@ body {
   transition: transform 0.12s, box-shadow 0.12s;
 }
 .replay-btn:hover { transform: translate(-2px,-2px); box-shadow: 7px 7px 0 var(--ink); }
-
 .menu-ret-btn {
   width: 100%;
   padding: 12px;
@@ -457,9 +422,7 @@ body {
   transition: background 0.15s;
 }
 .menu-ret-btn:hover { background: #F5F0E8; }
-
 .hidden { display: none !important; }
-
 @media (max-width: 360px) {
   .q-text { font-size: 2.8rem; }
   .opt-btn { font-size: 1.4rem; padding: 12px 6px; }
@@ -469,118 +432,112 @@ body {
 <body>
 <div class="shell">
 
-  <!-- ══ MENU ══ -->
-  <div id="menuScreen">
-    <div class="logo-bar">
-      <div class="logo-icon">✏️</div>
-      <div class="logo-text">乘法<span>闖關</span></div>
-    </div>
-
-    <div class="card">
-      <div class="label-tag">📐 選擇段數（可多選）</div>
-      <div class="table-grid">
-        <button class="tbl-btn active" data-n="2">2<span class="tick">✓</span></button>
-        <button class="tbl-btn active" data-n="4">4<span class="tick">✓</span></button>
-        <button class="tbl-btn active" data-n="5">5<span class="tick">✓</span></button>
-        <button class="tbl-btn active" data-n="8">8<span class="tick">✓</span></button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="label-tag">✏️ 出題方式</div>
-      <div class="pill-row">
-        <button class="pill-btn active" data-mode="choice">選擇題</button>
-        <button class="pill-btn" data-mode="fill">填空題</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="label-tag">📊 題數</div>
-      <div class="pill-row">
-        <button class="pill-btn active" data-count="10">10 題</button>
-        <button class="pill-btn" data-count="20">20 題</button>
-        <button class="pill-btn" data-count="36">全部</button>
-      </div>
-    </div>
-
-    <button class="start-btn" id="startBtn">開始闖關 🚀</button>
+<div id="menuScreen">
+  <div class="logo-bar">
+    <div class="logo-icon">✏️</div>
+    <div class="logo-text">乘法<span>闖關</span></div>
   </div>
 
-  <!-- ══ GAME ══ -->
-  <div id="gameScreen" class="hidden" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px;">
-
-    <div class="score-row">
-      <div class="score-pill c">
-        <div class="s-label">答對</div>
-        <div class="s-value" id="scoreCorrect">0</div>
-      </div>
-      <div class="score-pill w">
-        <div class="s-label">答錯</div>
-        <div class="s-value" id="scoreWrong">0</div>
-      </div>
-      <div class="score-pill p">
-        <div class="s-label">進度</div>
-        <div class="s-value" id="qProgress">1/10</div>
-      </div>
-    </div>
-
-    <div class="prog-track">
-      <div class="prog-fill" id="progFill" style="width:0%"></div>
-    </div>
-
-    <!-- Chalkboard -->
-    <div class="chalk-card">
-      <div class="q-label">✏️ 請作答</div>
-      <div class="q-text" id="questionText">2 × 3 = ?</div>
-      <div class="q-hint" id="questionHint"></div>
-      <div class="chalk-tray"></div>
-
-      <!-- choice -->
-      <div class="options-grid" id="choiceGrid">
-        <button class="opt-btn" id="opt0"></button>
-        <button class="opt-btn" id="opt1"></button>
-        <button class="opt-btn" id="opt2"></button>
-        <button class="opt-btn" id="opt3"></button>
-      </div>
-
-      <!-- fill -->
-      <div class="fill-row hidden" id="fillRow">
-        <input class="fill-input" id="fillInput" type="number" min="1" max="99" placeholder="?">
-        <button class="confirm-btn" id="submitFill">確認 ✓</button>
-      </div>
-
-      <div class="feedback" id="feedback"></div>
+  <div class="card">
+    <div class="label-tag">📐 選擇段數（可多選）</div>
+    <div class="table-grid">
+      <button class="tbl-btn active" data-n="2">2<span class="tick">✓</span></button>
+      <button class="tbl-btn active" data-n="3">3<span class="tick">✓</span></button>
+      <button class="tbl-btn active" data-n="4">4<span class="tick">✓</span></button>
+      <button class="tbl-btn active" data-n="5">5<span class="tick">✓</span></button>
+      <button class="tbl-btn active" data-n="6">6<span class="tick">✓</span></button>
+      <button class="tbl-btn active" data-n="8">8<span class="tick">✓</span></button>
+      <button class="tbl-btn active" data-n="9">9<span class="tick">✓</span></button>
     </div>
   </div>
 
-  <!-- ══ RESULT ══ -->
-  <div id="resultScreen" class="hidden result-card">
-    <div class="result-emoji" id="resultEmoji">🌟</div>
-    <div class="result-title" id="resultTitle">太厲害了！</div>
-    <div class="result-stats">
-      <div class="stat-badge g" id="rCorrect">答對 0</div>
-      <div class="stat-badge r" id="rWrong">答錯 0</div>
-      <div class="stat-badge b" id="rRate">正確率 0%</div>
+  <div class="card">
+    <div class="label-tag">✏️ 出題方式</div>
+    <div class="pill-row">
+      <button class="pill-btn active" data-mode="choice">選擇題</button>
+      <button class="pill-btn" data-mode="fill">填空題</button>
     </div>
-    <div class="review-box hidden" id="wrongList">
-      <h3>📝 再複習一下這些題目</h3>
-      <div id="wrongItems"></div>
-    </div>
-    <button class="replay-btn" id="replayBtn">再挑戰一次 🔄</button>
-    <button class="menu-ret-btn" id="menuReturnBtn">← 回主選單</button>
   </div>
+
+  <div class="card">
+    <div class="label-tag">📊 題數</div>
+    <div class="pill-row">
+      <button class="pill-btn active" data-count="10">10 題</button>
+      <button class="pill-btn" data-count="20">20 題</button>
+      <button class="pill-btn" data-count="999">全部</button>
+    </div>
+  </div>
+
+  <button class="start-btn" id="startBtn">開始闖關 🚀</button>
+</div>
+
+<div id="gameScreen" class="hidden" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px;">
+  <div class="score-row">
+    <div class="score-pill c">
+      <div class="s-label">答對</div>
+      <div class="s-value" id="scoreCorrect">0</div>
+    </div>
+    <div class="score-pill w">
+      <div class="s-label">答錯</div>
+      <div class="s-value" id="scoreWrong">0</div>
+    </div>
+    <div class="score-pill p">
+      <div class="s-label">進度</div>
+      <div class="s-value" id="qProgress">1/10</div>
+    </div>
+  </div>
+
+  <div class="prog-track">
+    <div class="prog-fill" id="progFill" style="width:0%"></div>
+  </div>
+
+  <div class="chalk-card">
+    <div class="q-label">✏️ 請作答</div>
+    <div class="q-text" id="questionText">2 × 3 = ?</div>
+    <div class="q-hint" id="questionHint"></div>
+    <div class="chalk-tray"></div>
+
+    <div class="options-grid" id="choiceGrid">
+      <button class="opt-btn" id="opt0"></button>
+      <button class="opt-btn" id="opt1"></button>
+      <button class="opt-btn" id="opt2"></button>
+      <button class="opt-btn" id="opt3"></button>
+    </div>
+
+    <div class="fill-row hidden" id="fillRow">
+      <input class="fill-input" id="fillInput" type="number" min="1" max="99" placeholder="?">
+      <button class="confirm-btn" id="submitFill">確認 ✓</button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+  </div>
+</div>
+
+<div id="resultScreen" class="hidden result-card">
+  <div class="result-emoji" id="resultEmoji">🌟</div>
+  <div class="result-title" id="resultTitle">太厲害了！</div>
+  <div class="result-stats">
+    <div class="stat-badge g" id="rCorrect">答對 0</div>
+    <div class="stat-badge r" id="rWrong">答錯 0</div>
+    <div class="stat-badge b" id="rRate">正確率 0%</div>
+  </div>
+  <div class="review-box hidden" id="wrongList">
+    <h3>📝 再複習一下這些題目</h3>
+    <div id="wrongItems"></div>
+  </div>
+  <button class="replay-btn" id="replayBtn">再挑戰一次 🔄</button>
+  <button class="menu-ret-btn" id="menuReturnBtn">← 回主選單</button>
+</div>
 
 </div>
 
 <script>
-// ── State ──
-let selectedTables = [2,4,5,8];
+let selectedTables = [2,3,4,5,6,8,9];
 let gameMode = 'choice';
 let totalCount = 10;
 let questions = [], currentQ = 0, correct = 0, wrong = 0;
 let wrongLog = [], answered = false;
 
-// ── Utils ──
 const $ = id => document.getElementById(id);
 const shuffle = a => { for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
 const show = id => $(id).classList.remove('hidden');
@@ -601,7 +558,6 @@ function makeChoices(correct, a) {
   return shuffle([...s]);
 }
 
-// ── Table buttons ──
 document.querySelectorAll('.tbl-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const n = +btn.dataset.n;
@@ -612,7 +568,6 @@ document.querySelectorAll('.tbl-btn').forEach(btn => {
   });
 });
 
-// ── Mode buttons ──
 document.querySelectorAll('[data-mode]').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('[data-mode]').forEach(b=>b.classList.remove('active'));
@@ -621,16 +576,14 @@ document.querySelectorAll('[data-mode]').forEach(btn => {
   });
 });
 
-// ── Count buttons ──
 document.querySelectorAll('[data-count]').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('[data-count]').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
-    totalCount = btn.dataset.count === '36' ? 999 : +btn.dataset.count;
+    totalCount = +btn.dataset.count;
   });
 });
 
-// ── Start ──
 $('startBtn').addEventListener('click', () => {
   if (!selectedTables.length) { alert('請至少選一個段數！'); return; }
   startGame();
@@ -719,8 +672,8 @@ function showResult() {
   $('resultScreen').classList.remove('hidden');
   const total = questions.length, rate = Math.round((correct/total)*100);
   let emoji='🌟', title='滿分！你是乘法王！';
-  if (rate < 60)       { emoji='😅'; title='再加油！多練習就會變強！'; }
-  else if (rate < 80)  { emoji='👍'; title='不錯哦！繼續努力！'; }
+  if (rate < 60) { emoji='😅'; title='再加油！多練習就會變強！'; }
+  else if (rate < 80) { emoji='👍'; title='不錯哦！繼續努力！'; }
   else if (rate < 100) { emoji='🎉'; title='幾乎全對！超棒的！'; }
   $('resultEmoji').textContent = emoji;
   $('resultTitle').textContent = title;
